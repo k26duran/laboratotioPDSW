@@ -104,7 +104,7 @@ En esta parte del parcial, se va a exponer por medio de unos servicios web, la a
 ## Badgets
 Nos permiten conocer el estado del proyecto en cualquier momento.
 
-https://circleci.com/gh/k26duran/laboratotioPDSW.svg?style=svg
+[![CircleCI](https://circleci.com/gh/k26duran/laboratotioPDSW.svg?style=svg)](https://circleci.com/gh/k26duran/laboratotioPDSW)
 
 [![Codacy Badge](https://api.codacy.com/project/badge/Grade/aaad0a3ecbf84c76a1325d1a03226f5b)](https://www.codacy.com/app/k26duran/laboratotioPDSW?utm_source=github.com&amp;utm_medium=referral&amp;utm_content=k26duran/laboratotioPDSW&amp;utm_campaign=Badge_Grade)
  
