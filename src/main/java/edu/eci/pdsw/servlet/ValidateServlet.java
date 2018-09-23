@@ -12,6 +12,8 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import edu.eci.pdsw.model.Employee;
+import edu.eci.pdsw.model.SocialSecurityType;
 import edu.eci.pdsw.validator.EmployeeValidator;
 import edu.eci.pdsw.validator.ErrorType;
 import edu.eci.pdsw.validator.SalaryValidator;
@@ -56,13 +58,47 @@ public class ValidateServlet extends HttpServlet {
 	@Override
 	protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
 		Writer responseWriter = resp.getWriter();
-
+		
+		
 		// TODO Create and validate employee
-		Optional<ErrorType> response = validator.validate(null);
+		Long salary =(Long) req.getAttribute("salary");
+		int personId= (int) req.getAttribute("personID");
+		SocialSecurityType tipoSeguridad= (SocialSecurityType) req.getAttribute("SocialSecurity");
+		
+		Optional<ErrorType> response = validator.validate(new Employee(personId,salary,tipoSeguridad));
+		
+		
 
 		// TODO Add the Content Type, Status, and Response according to validation response
+		
+		if(response.equals(ErrorType.INVALID_EPS_AFFILIATION)) {
+			resp.setContentType("Registro invalido por EPS");
+			resp.setStatus(resp.SC_BAD_REQUEST);
+			
+		}
+		else if (response.equals(ErrorType.INVALID_ID)) {
+			resp.setContentType("Registro invalido por Id");
+			resp.setStatus(resp.SC_BAD_REQUEST);
+		}
+		else if(response.equals(ErrorType.INVALID_SALARY)) {
+			resp.setContentType("Registro invalido por salario");
+			resp.setStatus(resp.SC_BAD_REQUEST);
+			
+		}
+		else if(response.equals(ErrorType.INVALID_SISBEN_AFFILIATION)) {
+			resp.setContentType("Registro invalido por SISBEN");
+			resp.setStatus(resp.SC_BAD_REQUEST);
+		}
+		else if(response.equals(ErrorType.INVALID_PREPAID_AFFILIATION)) {
+			resp.setContentType("Registro no valido por PREPAID");
+			resp.setStatus(resp.SC_BAD_REQUEST);
+		}
+		else {
+			resp.setStatus(resp.SC_OK);
+			resp.setContentType("Registro Exitoso");
+			
+		}
 		resp.setContentType("");
-		resp.setStatus(0);
 		responseWriter.write(String.format(readFile("result.html"), response.map(ErrorType::name).orElse("Success")));
 		responseWriter.flush();
 	}
