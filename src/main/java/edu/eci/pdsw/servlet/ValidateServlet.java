@@ -3,6 +3,7 @@ package edu.eci.pdsw.servlet;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
+import java.io.PrintWriter;
 import java.io.Writer;
 import java.util.Optional;
 
@@ -44,11 +45,15 @@ public class ValidateServlet extends HttpServlet {
 	@Override
 	protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
 		Writer responseWriter = resp.getWriter();
-
 		// TODO Add the corresponding Content Type, Status, and Response
-		resp.setContentType("");
-		resp.setStatus(0);
+		resp.setContentType("text/html");
 		responseWriter.write(readFile("form.html"));
+		
+		//Optional <String> optSalary= Optional.ofNullable(req.getParameter("salary"));
+		//String salary=optSalary.isPresent() && !optSalary.get().isEmpty() ? optSalary.get() : "";
+		//resp.setStatus(404);
+		//responseWriter.write("HOLA"+salary);
+		//responseWriter.write(readFile("form.html"));
 		responseWriter.flush();
 	}
 
@@ -58,48 +63,59 @@ public class ValidateServlet extends HttpServlet {
 	@Override
 	protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
 		Writer responseWriter = resp.getWriter();
-		
-		
+		try{
 		// TODO Create and validate employee
-		Long salary =(Long) req.getAttribute("salary");
-		int personId= (int) req.getAttribute("personID");
-		SocialSecurityType tipoSeguridad= (SocialSecurityType) req.getAttribute("SocialSecurity");
+		Long salary =Long.parseLong(req.getParameter("salary"));
+		int personId= Integer.parseInt(req.getParameter("personID"));
+		SocialSecurityType tipoSeguridad=SocialSecurityType.valueOf(req.getParameter("SocialSecurity"));
 		
 		Optional<ErrorType> response = validator.validate(new Employee(personId,salary,tipoSeguridad));
-		
-		
-
 		// TODO Add the Content Type, Status, and Response according to validation response
-		
 		if(response.equals(ErrorType.INVALID_EPS_AFFILIATION)) {
-			resp.setContentType("Registro invalido por EPS");
-			resp.setStatus(resp.SC_BAD_REQUEST);
+			responseWriter.write("La afiliacion EPS es invalida");
+			resp.setStatus(HttpServletResponse.SC_BAD_REQUEST);
+			responseWriter.write(String.format(readFile("result.hmtl"), response.map(ErrorType::name).orElse("Success")));
+			responseWriter.flush();
+		}
+		if (response.equals(ErrorType.INVALID_ID)) {
+			responseWriter.write("ID invalido");
+			resp.setStatus(HttpServletResponse.SC_BAD_REQUEST);
+			responseWriter.write(String.format(readFile("result.hmtl"), response.map(ErrorType::name).orElse("Success")));
+			responseWriter.flush();
+		}
+		if(response.equals(ErrorType.INVALID_SALARY)) {
+			responseWriter.write("Salario invalido");
+			resp.setStatus(HttpServletResponse.SC_BAD_REQUEST);
+			responseWriter.write(String.format(readFile("result.hmtl"), response.map(ErrorType::name).orElse("Success")));
+			responseWriter.flush();
+		}
+		if(response.equals(ErrorType.INVALID_SISBEN_AFFILIATION)) {
+			responseWriter.write("La afiliacion SISBEN es invalida");
+			resp.setStatus(HttpServletResponse.SC_BAD_REQUEST);
+			responseWriter.write(String.format(readFile("result.hmtl"), response.map(ErrorType::name).orElse("Success")));
+			responseWriter.flush();
 			
 		}
-		else if (response.equals(ErrorType.INVALID_ID)) {
-			resp.setContentType("Registro invalido por Id");
-			resp.setStatus(resp.SC_BAD_REQUEST);
+		if(response.equals(ErrorType.INVALID_PREPAID_AFFILIATION)) {
+			responseWriter.write("La afiliacion PREPAID es invalida");
+			resp.setStatus(HttpServletResponse.SC_BAD_REQUEST);
+			responseWriter.write(String.format(readFile("result.hmtl"), response.map(ErrorType::name).orElse("Success")));
+			responseWriter.flush();
 		}
-		else if(response.equals(ErrorType.INVALID_SALARY)) {
-			resp.setContentType("Registro invalido por salario");
-			resp.setStatus(resp.SC_BAD_REQUEST);
-			
+		
+		if(response.equals(Optional.empty())) {
+			responseWriter.write("Validacion correcta");
+			resp.setStatus(200);
+			responseWriter.write(String.format(readFile("result.html"), response.map(ErrorType::name).orElse("Success")));
+			responseWriter.flush();
+		}}
+		catch (Exception i){
+			responseWriter.write("Parametro valido");
+			resp.setStatus(500);
+			responseWriter.flush();
 		}
-		else if(response.equals(ErrorType.INVALID_SISBEN_AFFILIATION)) {
-			resp.setContentType("Registro invalido por SISBEN");
-			resp.setStatus(resp.SC_BAD_REQUEST);
-		}
-		else if(response.equals(ErrorType.INVALID_PREPAID_AFFILIATION)) {
-			resp.setContentType("Registro no valido por PREPAID");
-			resp.setStatus(resp.SC_BAD_REQUEST);
-		}
-		else {
-			resp.setStatus(resp.SC_OK);
-			resp.setContentType("Registro Exitoso");
-			
-		}
-		resp.setContentType("");
-		responseWriter.write(String.format(readFile("result.html"), response.map(ErrorType::name).orElse("Success")));
+
+		//responseWriter.write("Todos los parametros son validos");
 		responseWriter.flush();
 	}
 

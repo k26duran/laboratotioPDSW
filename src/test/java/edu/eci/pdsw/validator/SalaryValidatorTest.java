@@ -28,10 +28,7 @@ public class SalaryValidatorTest {
 		.forAll(validator.generadorEmpleados())
 		.check(
 				(employee)-> {
-					
-					
-					
-					if ((employee.getPersonId()>=1000) && (employee.getPersonId()=<100000)) {
+					if ((employee.getPersonId()>=1000) && (employee.getPersonId()<=100000)) {
 						
 						if(employee.getSalary()>=100 && employee.getSalary()<=50000) {
 							if(employee.getSocialSecurityType().EPS==SocialSecurityType.EPS) {
