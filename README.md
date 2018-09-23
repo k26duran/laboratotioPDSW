@@ -1,4 +1,4 @@
-## Escuela Colombiana de Ingeniería
+﻿## Escuela Colombiana de Ingeniería
 ## Procesos de desarrollo de Software – PDSW
 ## Parcial Práctico - 1er Tercio
 
@@ -99,3 +99,12 @@ En esta parte del parcial, se va a exponer por medio de unos servicios web, la a
 
 * Cargar en Moodle antes de finalizar el parcial.
 * Comprima todo el contenido del proyecto en un archivo .zip (excluyendo la carpeta target) y agreguela al esapcio correspondiente en Moodle.
+
+
+## Badgets
+Nos permiten conocer el estado del proyecto en cualquier momento.
+
+https://circleci.com/gh/k26duran/laboratotioPDSW.svg?style=svg
+
+[![Codacy Badge](https://api.codacy.com/project/badge/Grade/aaad0a3ecbf84c76a1325d1a03226f5b)](https://www.codacy.com/app/k26duran/laboratotioPDSW?utm_source=github.com&amp;utm_medium=referral&amp;utm_content=k26duran/laboratotioPDSW&amp;utm_campaign=Badge_Grade)
+ 
