@@ -2,8 +2,6 @@ package edu.eci.pdsw.validator;
 
 import java.util.Optional;
 
-import org.quicktheories.core.Gen;
-import org.quicktheories.generators.Generate;
 
 import edu.eci.pdsw.model.Employee;
 import edu.eci.pdsw.model.SocialSecurityType;
